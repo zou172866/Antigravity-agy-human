@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="assets/logo.svg" alt="agy-clarity logo" width="80" />
+<img src="assets/logo.svg" alt="agy-clean logo" width="80" />
 
-# agy-clarity
+# agy-clean
 
 **Google Antigravity 零依赖轻量插件：实时编程「通俗与技术精度平衡」表达规范 · 按需 `wait-what` 费曼拆解技能 · 兼容 Claude Code / Cursor / Codex**
 
@@ -12,15 +12,15 @@
 
 ---
 
-## agy-clarity 是什么？
+## agy-clean 是什么？
 
-`agy-clarity` 是面向 **Google Antigravity 桌面端 / IDE** 的轻量纯文本插件（同时可直接复用到 **Claude Code**、**Cursor** 和 **Codex**）。
+`agy-clean` 是面向 **Google Antigravity 桌面端 / IDE** 的轻量纯文本插件（同时可直接复用到 **Claude Code**、**Cursor** 和 **Codex**）。
 
 日常和 AI 写代码、排错时，回复经常走向两个极端：
 1. **纯黑话堆砌**：满屏抽象名词和被动语态，看半天不知道到底改了什么、为什么会坏。
 2. **过度大白话降智**：只给泛泛比喻，把文件路径、函数名、报错码、验证命令全吞掉，排错和 Code Review 根本没法落地。
 
-`agy-clarity` 用两份精炼的纯 Markdown 规范把两边拉回甜点区：
+`agy-clean` 用两份精炼的纯 Markdown 规范把两边拉回甜点区：
 
 - **常驻表达规范（[`rules/AGENTS.md`](rules/AGENTS.md)）**：插件开启即生效。小改动极简直出不拖节奏；复杂任务按倒金字塔输出——先用 1～2 句人话点破结论，紧接着逐字保留精确路径、函数/类名、配置键、原始报错与实跑验证结果，重点讲清根因与取舍。
 - **按需 `wait-what` 拆解技能（[`skills/wait-what/SKILL.md`](skills/wait-what/SKILL.md)）**：当你没听懂上一轮技术解释、卡在复杂源码或报错里，说一句“说人话 / `wait-what` / 费曼拆解”即触发——按「一句话定位 → 人话拆解机制（含类比代码映射与失效边界）→ 技术锚点与易踩坑」三层讲透，不失真、不降智。
@@ -36,31 +36,31 @@
 **Windows（PowerShell 一行直装）：**
 
 ```powershell
-irm https://raw.githubusercontent.com/zou172866/Antigravity-agy-clarity/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/zou172866/Antigravity-agy-clean/main/install.ps1 | iex
 ```
 
 **macOS / Linux（一行直装）：**
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/zou172866/Antigravity-agy-clarity/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/zou172866/Antigravity-agy-clean/main/install.sh | sh
 ```
 
 **手动 `git clone` 安装：**
 
 ```powershell
 # Windows (PowerShell)
-git clone https://github.com/zou172866/Antigravity-agy-clarity.git "$HOME\.gemini\config\plugins\agy-clarity"
+git clone https://github.com/zou172866/Antigravity-agy-clean.git "$HOME\.gemini\config\plugins\agy-clean"
 ```
 
 ```bash
 # macOS / Linux
-git clone https://github.com/zou172866/Antigravity-agy-clarity.git "$HOME/.gemini/config/plugins/agy-clarity"
+git clone https://github.com/zou172866/Antigravity-agy-clean.git "$HOME/.gemini/config/plugins/agy-clean"
 ```
 
 **仅安装 `wait-what` 技能（跨工具通用）：**
 
 ```bash
-npx -y skills add zou172866/Antigravity-agy-clarity
+npx -y skills add zou172866/Antigravity-agy-clean
 ```
 
 **一键卸载：**
@@ -70,7 +70,7 @@ npx -y skills add zou172866/Antigravity-agy-clarity
 .\install.ps1 -Uninstall
 
 # Windows（远程一行卸载）
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/zou172866/Antigravity-agy-clarity/main/install.ps1))) -Uninstall
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/zou172866/Antigravity-agy-clean/main/install.ps1))) -Uninstall
 ```
 
 ```bash
@@ -78,7 +78,7 @@ npx -y skills add zou172866/Antigravity-agy-clarity
 sh ./install.sh --uninstall
 
 # macOS / Linux（远程一行卸载）
-curl -fsSL https://raw.githubusercontent.com/zou172866/Antigravity-agy-clarity/main/install.sh | sh -s -- --uninstall
+curl -fsSL https://raw.githubusercontent.com/zou172866/Antigravity-agy-clean/main/install.sh | sh -s -- --uninstall
 ```
 
 ---
@@ -97,7 +97,7 @@ curl -fsSL https://raw.githubusercontent.com/zou172866/Antigravity-agy-clarity/m
 
 *问题*：把工程锚点删光了——不知道改了哪个文件、有没有吞掉正常的 `AbortError`、跑没跑过测试，也看不出真实系统里服务端请求是否真被终止。
 
-### 3. `agy-clarity` 平衡版（第一眼看懂 + 100% 保留技术精度）
+### 3. `agy-clean` 平衡版（第一眼看懂 + 100% 保留技术精度）
 > **结论**：搜索框快速输入时不会再闪回旧结果——每次新输入都会先取消上一次未完成的请求。
 >
 > - **根因**：前一次慢请求比新请求晚返回，把 `results` 状态覆盖成了旧数据（**异步竞态 / Race Condition**）。
@@ -111,7 +111,7 @@ curl -fsSL https://raw.githubusercontent.com/zou172866/Antigravity-agy-clarity/m
 
 ## 常驻规范：`rules/AGENTS.md`
 
-安装并启用 `agy-clarity` 后，`rules/AGENTS.md` 自动生效，覆盖五条核心原则：
+安装并启用 `agy-clean` 后，`rules/AGENTS.md` 自动生效，覆盖五条核心原则：
 
 1. **自适应详略**：1～2 处小修或明确查询直接极简回复（结论 + 改动位置/命令 + 验证结果），绝不啰嗦。
 2. **倒金字塔（先人话结论，再给技术锚点）**：开头 1～2 句直白短句交代结果，紧跟逐字保留的文件路径、函数/类名、配置键、原始报错与真实命令输出。
@@ -143,21 +143,21 @@ curl -fsSL https://raw.githubusercontent.com/zou172866/Antigravity-agy-clarity/m
 
 ## 在 Claude Code / Cursor / Codex 中复用
 
-`agy-clarity` 采用开放的 Markdown 规则与 Agent Skills 结构，可零成本复用到其他 AI 编程工具：
+`agy-clean` 采用开放的 Markdown 规则与 Agent Skills 结构，可零成本复用到其他 AI 编程工具：
 
 | 工具 | 常驻规范（`rules/AGENTS.md`） | 按需技能（`skills/wait-what`） |
 | :--- | :--- | :--- |
-| **Google Antigravity** | 一键安装脚本自动部署至 `~/.gemini/config/plugins/agy-clarity` | 随插件自动启用 |
-| **Claude Code** | 将 `rules/AGENTS.md` 追加至 `~/.claude/CLAUDE.md` 或项目 `CLAUDE.md` | `npx -y skills add zou172866/Antigravity-agy-clarity` |
-| **Cursor** | 复制 `rules/AGENTS.md` 为 `.cursor/rules/agy-clarity.mdc`（开启 `alwaysApply: true`） | `npx -y skills add zou172866/Antigravity-agy-clarity` |
-| **OpenAI Codex** | 将 `rules/AGENTS.md` 追加至 `~/.codex/AGENTS.md` 或仓库 `AGENTS.md` | `npx -y skills add zou172866/Antigravity-agy-clarity` |
+| **Google Antigravity** | 一键安装脚本自动部署至 `~/.gemini/config/plugins/agy-clean` | 随插件自动启用 |
+| **Claude Code** | 将 `rules/AGENTS.md` 追加至 `~/.claude/CLAUDE.md` 或项目 `CLAUDE.md` | `npx -y skills add zou172866/Antigravity-agy-clean` |
+| **Cursor** | 复制 `rules/AGENTS.md` 为 `.cursor/rules/agy-clean.mdc`（开启 `alwaysApply: true`） | `npx -y skills add zou172866/Antigravity-agy-clean` |
+| **OpenAI Codex** | 将 `rules/AGENTS.md` 追加至 `~/.codex/AGENTS.md` 或仓库 `AGENTS.md` | `npx -y skills add zou172866/Antigravity-agy-clean` |
 
 ---
 
 ## 仓库目录结构
 
 ```text
-Antigravity-agy-clarity/
+Antigravity-agy-clean/
 ├── plugin.json                 # Antigravity 官方插件清单
 ├── rules/
 │   └── AGENTS.md               # 常驻「通俗与技术精度平衡」表达规范

@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="assets/logo.svg" alt="agy-clarity logo" width="80" />
+<img src="assets/logo.svg" alt="agy-clean logo" width="80" />
 
-# agy-clarity
+# agy-clean
 
 **Google Antigravity plugin: balanced plain-language + technical-precision coding communication · on-demand `wait-what` Feynman breakdown · zero Node/Python dependencies**
 
@@ -12,15 +12,15 @@
 
 ---
 
-## What is agy-clarity?
+## What is agy-clean?
 
-`agy-clarity` is a lightweight, zero-dependency plugin for **Google Antigravity Desktop / IDE** (and directly reusable in **Claude Code**, **Cursor**, and **Codex**).
+`agy-clean` is a lightweight, zero-dependency plugin for **Google Antigravity Desktop / IDE** (and directly reusable in **Claude Code**, **Cursor**, and **Codex**).
 
 AI coding assistants often fall into one of two traps:
 1. **Wall of jargon** — passive-voice essays packed with abstractions that hide what actually changed or broke.
 2. **Dumbed-down hand-waving** — overly casual metaphors that omit file paths, symbols, error codes, and verification commands, leaving you with nothing usable for debugging or code review.
 
-`agy-clarity` solves both with two pure-Markdown components:
+`agy-clean` solves both with two pure-Markdown components:
 
 - **Always-on Rule ([`rules/AGENTS.md`](rules/AGENTS.md))**: Keeps every coding turn immediately readable at a glance (inverted-pyramid headline first, mechanism before jargon, Why & trade-offs over diff narration) while preserving exact paths, symbols, parameters, error codes, and test outputs verbatim.
 - **On-demand Skill ([`skills/wait-what/SKILL.md`](skills/wait-what/SKILL.md))**: Activates whenever you say *"wait-what"*, *"explain in plain language"*, *"说人话"*, or *"费曼拆解"* during debugging or reading complex code — delivering a 3-tier breakdown with explicit analogy-to-code mappings and analogy failure boundaries.
@@ -38,31 +38,31 @@ Run the one-line installer for your OS, then **restart or reload your Antigravit
 **Windows (PowerShell):**
 
 ```powershell
-irm https://raw.githubusercontent.com/zou172866/Antigravity-agy-clarity/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/zou172866/Antigravity-agy-clean/main/install.ps1 | iex
 ```
 
 **macOS / Linux:**
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/zou172866/Antigravity-agy-clarity/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/zou172866/Antigravity-agy-clean/main/install.sh | sh
 ```
 
 **Manual `git clone` install:**
 
 ```bash
 # macOS / Linux
-git clone https://github.com/zou172866/Antigravity-agy-clarity.git "$HOME/.gemini/config/plugins/agy-clarity"
+git clone https://github.com/zou172866/Antigravity-agy-clean.git "$HOME/.gemini/config/plugins/agy-clean"
 ```
 
 ```powershell
 # Windows (PowerShell)
-git clone https://github.com/zou172866/Antigravity-agy-clarity.git "$HOME\.gemini\config\plugins\agy-clarity"
+git clone https://github.com/zou172866/Antigravity-agy-clean.git "$HOME\.gemini\config\plugins\agy-clean"
 ```
 
 **Skill-only install (cross-agent via `npx skills`):**
 
 ```bash
-npx -y skills add zou172866/Antigravity-agy-clarity
+npx -y skills add zou172866/Antigravity-agy-clean
 ```
 
 **Uninstall:**
@@ -72,7 +72,7 @@ npx -y skills add zou172866/Antigravity-agy-clarity
 .\install.ps1 -Uninstall
 
 # Windows (remote one-liner)
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/zou172866/Antigravity-agy-clarity/main/install.ps1))) -Uninstall
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/zou172866/Antigravity-agy-clean/main/install.ps1))) -Uninstall
 ```
 
 ```bash
@@ -80,7 +80,7 @@ npx -y skills add zou172866/Antigravity-agy-clarity
 sh ./install.sh --uninstall
 
 # macOS / Linux (remote one-liner)
-curl -fsSL https://raw.githubusercontent.com/zou172866/Antigravity-agy-clarity/main/install.sh | sh -s -- --uninstall
+curl -fsSL https://raw.githubusercontent.com/zou172866/Antigravity-agy-clean/main/install.sh | sh -s -- --uninstall
 ```
 
 ---
@@ -99,7 +99,7 @@ Suppose you just fixed a classic search-box bug where typing fast causes stale r
 
 *Problem*: Cute analogy, zero engineering traceability. No file path, no symbol name, no error handling detail, no proof anything was tested, and the analogy hides real edge cases like `AbortError` handling.
 
-### 3. `agy-clarity` Balanced (Plain headline + exact technical anchors)
+### 3. `agy-clean` Balanced (Plain headline + exact technical anchors)
 > **Conclusion**: Typing quickly in the search box no longer flashes stale results — each new keystroke now cancels the previous in-flight request before issuing the next one.
 >
 > - **Root cause**: An earlier slower request returned after a newer request and overwrote `results` state (**asynchronous race condition**).
@@ -113,7 +113,7 @@ Suppose you just fixed a classic search-box bug where typing fast causes stale r
 
 ## Always-On Rule: `rules/AGENTS.md`
 
-While `agy-clarity` is enabled in Antigravity, `rules/AGENTS.md` is automatically loaded with five disciplined principles:
+While `agy-clean` is enabled in Antigravity, `rules/AGENTS.md` is automatically loaded with five disciplined principles:
 
 1. **Adaptive Verbosity**: Tiny 1–2 file fixes or direct lookups get a terse one-line answer (`conclusion + location/command + verification`). Complex tasks use the layered structure.
 2. **Inverted Pyramid (Plain Conclusion → Technical Anchors)**: Lead with 1–2 short, active-voice sentences stating what changed or broke; immediately follow with verbatim file paths, function/class names, config keys, error codes, and actual test results.
@@ -145,21 +145,21 @@ When an explanation still feels foggy — or you are stepping through unfamiliar
 
 ## Use with Claude Code, Cursor & Codex
 
-Because `agy-clarity` is pure Markdown following open agent standards, you can reuse both parts across other coding agents:
+Because `agy-clean` is pure Markdown following open agent standards, you can reuse both parts across other coding agents:
 
 | Tool | Always-On Rule (`rules/AGENTS.md`) | On-Demand Skill (`skills/wait-what`) |
 | :--- | :--- | :--- |
-| **Google Antigravity** | Automatic via one-line installer (`~/.gemini/config/plugins/agy-clarity`) | Automatic via plugin |
-| **Claude Code** | Append `rules/AGENTS.md` into `~/.claude/CLAUDE.md` or project `CLAUDE.md` | `npx -y skills add zou172866/Antigravity-agy-clarity` |
-| **Cursor** | Copy `rules/AGENTS.md` into `.cursor/rules/agy-clarity.mdc` (`alwaysApply: true`) | `npx -y skills add zou172866/Antigravity-agy-clarity` |
-| **OpenAI Codex** | Append `rules/AGENTS.md` into `~/.codex/AGENTS.md` or repo `AGENTS.md` | `npx -y skills add zou172866/Antigravity-agy-clarity` |
+| **Google Antigravity** | Automatic via one-line installer (`~/.gemini/config/plugins/agy-clean`) | Automatic via plugin |
+| **Claude Code** | Append `rules/AGENTS.md` into `~/.claude/CLAUDE.md` or project `CLAUDE.md` | `npx -y skills add zou172866/Antigravity-agy-clean` |
+| **Cursor** | Copy `rules/AGENTS.md` into `.cursor/rules/agy-clean.mdc` (`alwaysApply: true`) | `npx -y skills add zou172866/Antigravity-agy-clean` |
+| **OpenAI Codex** | Append `rules/AGENTS.md` into `~/.codex/AGENTS.md` or repo `AGENTS.md` | `npx -y skills add zou172866/Antigravity-agy-clean` |
 
 ---
 
 ## Repository Structure
 
 ```text
-Antigravity-agy-clarity/
+Antigravity-agy-clean/
 ├── plugin.json                 # Official Antigravity plugin manifest
 ├── rules/
 │   └── AGENTS.md               # Always-on balanced coding communication rule
@@ -181,7 +181,7 @@ Antigravity-agy-clarity/
 
 ## Credits & Inspiration
 
-`agy-clarity` synthesizes practical ideas from open-source prompt engineering and technical writing communities:
+`agy-clean` synthesizes practical ideas from open-source prompt engineering and technical writing communities:
 
 - [`smixs/awesome-claude-output-styles`](https://github.com/smixs/awesome-claude-output-styles) — curated output style patterns balancing clarity and signal density
 - [`mattpocock/skills`](https://github.com/mattpocock/skills) — the `wait-what` restatement workflow for re-explaining dense code concepts on demand
