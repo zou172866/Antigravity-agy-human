@@ -1,18 +1,18 @@
 <#
 .SYNOPSIS
-  Zero-dependency Windows installer/uninstaller for agy-clean (Google Antigravity plugin).
+  Zero-dependency Windows installer/uninstaller for agy-human (Google Antigravity plugin).
 .DESCRIPTION
-  Syncs agy-clean plugin files into $HOME\.gemini\config\plugins\agy-clean (excluding .git)
+  Syncs agy-human plugin files into $HOME\.gemini\config\plugins\agy-human (excluding .git)
   without requiring Node.js or Python and without modifying config.json.
   Supports both remote one-liner (`irm ... | iex`) and local repository runs.
 .EXAMPLE
-  irm https://raw.githubusercontent.com/zou172866/Antigravity-agy-clean/main/install.ps1 | iex
+  irm https://raw.githubusercontent.com/zou172866/Antigravity-agy-human/main/install.ps1 | iex
 .EXAMPLE
   .\install.ps1
 .EXAMPLE
   .\install.ps1 -Uninstall
 .EXAMPLE
-  & ([scriptblock]::Create((irm https://raw.githubusercontent.com/zou172866/Antigravity-agy-clean/main/install.ps1))) -Uninstall
+  & ([scriptblock]::Create((irm https://raw.githubusercontent.com/zou172866/Antigravity-agy-human/main/install.ps1))) -Uninstall
 #>
 param(
   [switch]$Uninstall,
@@ -21,7 +21,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-$RepoSlug = "zou172866/Antigravity-agy-clean"
+$RepoSlug = "zou172866/Antigravity-agy-human"
 $RepoGitUrl = "https://github.com/$RepoSlug.git"
 $RepoZipUrl = "https://github.com/$RepoSlug/archive/refs/heads/main.zip"
 $ScriptPath = $MyInvocation.MyCommand.Path
@@ -102,7 +102,7 @@ if (-not $HomeDir) {
 $ResolvedHome = Normalize-FullPath $HomeDir $HomeDir
 
 $CustomTarget = -not [string]::IsNullOrWhiteSpace($TargetDir)
-$DefaultTarget = Join-Path $ResolvedHome ".gemini\config\plugins\agy-clean"
+$DefaultTarget = Join-Path $ResolvedHome ".gemini\config\plugins\agy-human"
 $RawTarget = if ($CustomTarget) { $TargetDir } else { $DefaultTarget }
 $ResolvedTarget = Normalize-FullPath $RawTarget $ResolvedHome
 
@@ -121,7 +121,7 @@ foreach ($protected in $ProtectedPaths) {
 
 if ($Uninstall) {
   if (-not (Test-Path -LiteralPath $ResolvedTarget)) {
-    Write-Host "[agy-clean] Not installed at $ResolvedTarget (nothing to remove)."
+    Write-Host "[agy-human] Not installed at $ResolvedTarget (nothing to remove)."
     return
   }
 
@@ -131,13 +131,13 @@ if ($Uninstall) {
 
   $leafName = Split-Path -Leaf $ResolvedTarget
   $hasManifest = Test-Path -LiteralPath (Join-Path $ResolvedTarget "plugin.json") -PathType Leaf
-  if ($CustomTarget -and ($leafName -ine "agy-clean") -and (-not $hasManifest)) {
-    Fail-Install "Refusing to remove '$ResolvedTarget': directory is not named 'agy-clean' and contains no plugin.json."
+  if ($CustomTarget -and ($leafName -ine "agy-human") -and (-not $hasManifest)) {
+    Fail-Install "Refusing to remove '$ResolvedTarget': directory is not named 'agy-human' and contains no plugin.json."
   }
 
   Remove-Item -LiteralPath $ResolvedTarget -Recurse -Force
-  Write-Host "[agy-clean] Uninstalled plugin from: $ResolvedTarget"
-  Write-Host "[agy-clean] Restart or reload your Antigravity window to apply changes."
+  Write-Host "[agy-human] Uninstalled plugin from: $ResolvedTarget"
+  Write-Host "[agy-human] Restart or reload your Antigravity window to apply changes."
   return
 }
 
@@ -155,15 +155,15 @@ $SwapCompleted = $false
 try {
   if (Test-PluginSource $ScriptDir) {
     $SourceDir = $ScriptDir
-    Write-Host "[agy-clean] Installing from local repository: $SourceDir"
+    Write-Host "[agy-human] Installing from local repository: $SourceDir"
   } else {
-    $TempWorkDir = Join-Path ([System.IO.Path]::GetTempPath()) ("agy-clean-install-" + [guid]::NewGuid().ToString("N"))
+    $TempWorkDir = Join-Path ([System.IO.Path]::GetTempPath()) ("agy-human-install-" + [guid]::NewGuid().ToString("N"))
     [System.IO.Directory]::CreateDirectory($TempWorkDir) | Out-Null
     $RepoDir = Join-Path $TempWorkDir "repo"
     $Fetched = $false
 
     if (Get-Command git -ErrorAction SilentlyContinue) {
-      Write-Host "[agy-clean] Fetching latest release from GitHub via git..."
+      Write-Host "[agy-human] Fetching latest release from GitHub via git..."
       $prevEap = $ErrorActionPreference
       try {
         $ErrorActionPreference = "Continue"
@@ -183,17 +183,17 @@ try {
     }
 
     if (-not $Fetched) {
-      Write-Host "[agy-clean] Downloading archive from GitHub..."
+      Write-Host "[agy-human] Downloading archive from GitHub..."
       try {
         [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
       } catch {
         # Ignore on runtimes where SecurityProtocol is managed automatically
       }
-      $ZipFile = Join-Path $TempWorkDir "agy-clean.zip"
+      $ZipFile = Join-Path $TempWorkDir "agy-human.zip"
       $ExtractDir = Join-Path $TempWorkDir "extract"
       [System.IO.Directory]::CreateDirectory($ExtractDir) | Out-Null
       $WebClient = New-Object System.Net.WebClient
-      $WebClient.Headers.Add("User-Agent", "agy-clean-installer")
+      $WebClient.Headers.Add("User-Agent", "agy-human-installer")
       try {
         $WebClient.DownloadFile($RepoZipUrl, $ZipFile)
       } finally {
@@ -206,7 +206,7 @@ try {
       } else {
         $Extracted = Get-ChildItem -LiteralPath $ExtractDir -Directory | Where-Object { Test-PluginSource $_.FullName } | Select-Object -First 1
         if (-not $Extracted) {
-          Fail-Install "Failed to locate valid agy-clean files inside downloaded archive."
+          Fail-Install "Failed to locate valid agy-human files inside downloaded archive."
         }
         $SourceDir = $Extracted.FullName
       }
@@ -214,13 +214,13 @@ try {
   }
 
   if (-not (Test-PluginSource $SourceDir)) {
-    Fail-Install "Invalid agy-clean source directory: $SourceDir"
+    Fail-Install "Invalid agy-human source directory: $SourceDir"
   }
 
   $ResolvedSource = Normalize-FullPath $SourceDir $ResolvedHome
   if ($ResolvedSource -ieq $ResolvedTarget) {
-    Write-Host "[agy-clean] Plugin is already installed in place at: $ResolvedTarget"
-    Write-Host "[agy-clean] Restart or reload your Antigravity window if not yet loaded."
+    Write-Host "[agy-human] Plugin is already installed in place at: $ResolvedTarget"
+    Write-Host "[agy-human] Restart or reload your Antigravity window if not yet loaded."
     return
   }
 
@@ -235,7 +235,7 @@ try {
   $ParentDir = Split-Path -Parent $ResolvedTarget
   [System.IO.Directory]::CreateDirectory($ParentDir) | Out-Null
 
-  $StageDir = Join-Path $ParentDir (".agy-clean-stage-" + [guid]::NewGuid().ToString("N"))
+  $StageDir = Join-Path $ParentDir (".agy-human-stage-" + [guid]::NewGuid().ToString("N"))
   [System.IO.Directory]::CreateDirectory($StageDir) | Out-Null
 
   $Items = Get-ChildItem -LiteralPath $ResolvedSource -Force | Where-Object { $_.Name -ne ".git" }
@@ -254,7 +254,7 @@ try {
   }
 
   if (Test-Path -LiteralPath $ResolvedTarget) {
-    $BackupDir = Join-Path $ParentDir (".agy-clean-backup-" + [guid]::NewGuid().ToString("N"))
+    $BackupDir = Join-Path $ParentDir (".agy-human-backup-" + [guid]::NewGuid().ToString("N"))
     Move-Item -LiteralPath $ResolvedTarget -Destination $BackupDir
   }
 
@@ -272,9 +272,9 @@ try {
     Remove-Item -LiteralPath $BackupDir -Recurse -Force -ErrorAction SilentlyContinue
   }
 
-  Write-Host "[agy-clean] Installed successfully to: $ResolvedTarget"
-  Write-Host "[agy-clean] Included: rules/AGENTS.md (always-on) and skills/wait-what/SKILL.md (on-demand)."
-  Write-Host "[agy-clean] config.json was not modified. Restart or reload your Antigravity window to activate."
+  Write-Host "[agy-human] Installed successfully to: $ResolvedTarget"
+  Write-Host "[agy-human] Included: rules/AGENTS.md (always-on) and skills/wait-what/SKILL.md (on-demand)."
+  Write-Host "[agy-human] config.json was not modified. Restart or reload your Antigravity window to activate."
 } finally {
   if ($TempWorkDir -and (Test-Path -LiteralPath $TempWorkDir)) {
     Remove-Item -LiteralPath $TempWorkDir -Recurse -Force -ErrorAction SilentlyContinue

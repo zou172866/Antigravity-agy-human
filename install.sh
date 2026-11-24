@@ -1,11 +1,11 @@
 #!/usr/bin/env sh
-# Zero-dependency POSIX installer/uninstaller for agy-clean (Google Antigravity plugin).
-# Supports both `curl -fsSL https://raw.githubusercontent.com/zou172866/Antigravity-agy-clean/main/install.sh | sh`
+# Zero-dependency POSIX installer/uninstaller for agy-human (Google Antigravity plugin).
+# Supports both `curl -fsSL https://raw.githubusercontent.com/zou172866/Antigravity-agy-human/main/install.sh | sh`
 # and local repository runs (`sh ./install.sh`, `sh ./install.sh --uninstall`).
 set -eu
 
 main() {
-REPO_SLUG="zou172866/Antigravity-agy-clean"
+REPO_SLUG="zou172866/Antigravity-agy-human"
 REPO_GIT_URL="https://github.com/$REPO_SLUG.git"
 REPO_TAR_URL="https://github.com/$REPO_SLUG/archive/refs/heads/main.tar.gz"
 
@@ -18,7 +18,7 @@ usage() {
 Usage: install.sh [OPTIONS]
 
 Options:
-  --uninstall       Remove the installed agy-clean plugin directory
+  --uninstall       Remove the installed agy-human plugin directory
   --target DIR      Install or uninstall at a custom directory
   -h, --help        Show this help message
 EOF
@@ -170,7 +170,7 @@ if [ "$CUSTOM_TARGET" -eq 0 ]; then
     echo "Error: HOME environment variable is not set." >&2
     exit 1
   fi
-  TARGET_DIR="${NORM_HOME%/}/.gemini/config/plugins/agy-clean"
+  TARGET_DIR="${NORM_HOME%/}/.gemini/config/plugins/agy-human"
 fi
 
 TARGET_DIR="$(normalize_path "$TARGET_DIR")"
@@ -202,7 +202,7 @@ is_valid_plugin_source() {
 
 if [ "$UNINSTALL" -eq 1 ]; then
   if [ ! -e "$TARGET_DIR" ] && [ ! -L "$TARGET_DIR" ]; then
-    echo "[agy-clean] Not installed at $TARGET_DIR (nothing to remove)."
+    echo "[agy-human] Not installed at $TARGET_DIR (nothing to remove)."
     exit 0
   fi
 
@@ -212,14 +212,14 @@ if [ "$UNINSTALL" -eq 1 ]; then
   fi
 
   LEAF_NAME="$(basename -- "$TARGET_DIR")"
-  if [ "$CUSTOM_TARGET" -eq 1 ] && [ "$LEAF_NAME" != "agy-clean" ] && [ ! -f "$TARGET_DIR/plugin.json" ]; then
-    echo "Error: Refusing to remove '$TARGET_DIR': directory is not named 'agy-clean' and contains no plugin.json." >&2
+  if [ "$CUSTOM_TARGET" -eq 1 ] && [ "$LEAF_NAME" != "agy-human" ] && [ ! -f "$TARGET_DIR/plugin.json" ]; then
+    echo "Error: Refusing to remove '$TARGET_DIR': directory is not named 'agy-human' and contains no plugin.json." >&2
     exit 1
   fi
 
   rm -rf -- "$TARGET_DIR"
-  echo "[agy-clean] Uninstalled plugin from: $TARGET_DIR"
-  echo "[agy-clean] Restart or reload your Antigravity window to apply changes."
+  echo "[agy-human] Uninstalled plugin from: $TARGET_DIR"
+  echo "[agy-human] Restart or reload your Antigravity window to apply changes."
   exit 0
 fi
 
@@ -264,14 +264,14 @@ fi
 SRC_DIR=""
 if [ -n "$SCRIPT_DIR" ]; then
   SRC_DIR="$SCRIPT_DIR"
-  echo "[agy-clean] Installing from local repository: $SRC_DIR"
+  echo "[agy-human] Installing from local repository: $SRC_DIR"
 else
-  TMP_DIR="$(mktemp -d 2>/dev/null || mktemp -d -t 'agy-clean-install')"
+  TMP_DIR="$(mktemp -d 2>/dev/null || mktemp -d -t 'agy-human-install')"
   REPO_DIR="$TMP_DIR/repo"
   FETCHED=0
 
   if command -v git >/dev/null 2>&1; then
-    echo "[agy-clean] Fetching latest release from GitHub via git..."
+    echo "[agy-human] Fetching latest release from GitHub via git..."
     if git clone --depth 1 --quiet "$REPO_GIT_URL" "$REPO_DIR" && is_valid_plugin_source "$REPO_DIR"; then
       SRC_DIR="$REPO_DIR"
       FETCHED=1
@@ -286,11 +286,11 @@ else
       exit 1
     fi
 
-    TAR_FILE="$TMP_DIR/agy-clean.tar.gz"
+    TAR_FILE="$TMP_DIR/agy-human.tar.gz"
     DOWNLOADED=0
 
     if command -v curl >/dev/null 2>&1; then
-      echo "[agy-clean] Downloading archive from GitHub via curl..."
+      echo "[agy-human] Downloading archive from GitHub via curl..."
       if curl -fsSL -o "$TAR_FILE" "$REPO_TAR_URL"; then
         DOWNLOADED=1
       else
@@ -299,7 +299,7 @@ else
     fi
 
     if [ "$DOWNLOADED" -eq 0 ] && command -v wget >/dev/null 2>&1; then
-      echo "[agy-clean] Downloading archive from GitHub via wget..."
+      echo "[agy-human] Downloading archive from GitHub via wget..."
       if wget -qO "$TAR_FILE" "$REPO_TAR_URL"; then
         DOWNLOADED=1
       else
@@ -308,7 +308,7 @@ else
     fi
 
     if [ "$DOWNLOADED" -eq 0 ]; then
-      echo "Error: Failed to download agy-clean archive (curl or wget required)." >&2
+      echo "Error: Failed to download agy-human archive (curl or wget required)." >&2
       exit 1
     fi
 
@@ -330,21 +330,21 @@ else
     fi
 
     if [ "$FETCHED" -eq 0 ]; then
-      echo "Error: Failed to locate valid agy-clean files inside downloaded archive." >&2
+      echo "Error: Failed to locate valid agy-human files inside downloaded archive." >&2
       exit 1
     fi
   fi
 fi
 
 if ! is_valid_plugin_source "$SRC_DIR"; then
-  echo "Error: Invalid agy-clean source directory: $SRC_DIR" >&2
+  echo "Error: Invalid agy-human source directory: $SRC_DIR" >&2
   exit 1
 fi
 
 CANON_SRC="$(CDPATH= cd -- "$SRC_DIR" && pwd -P)"
 if [ "$CANON_SRC" = "$CANON_TARGET" ]; then
-  echo "[agy-clean] Plugin is already installed in place at: $TARGET_DIR"
-  echo "[agy-clean] Restart or reload your Antigravity window if not yet loaded."
+  echo "[agy-human] Plugin is already installed in place at: $TARGET_DIR"
+  echo "[agy-human] Restart or reload your Antigravity window if not yet loaded."
   exit 0
 fi
 
@@ -365,9 +365,9 @@ esac
 PARENT_DIR="$(dirname -- "$TARGET_DIR")"
 mkdir -p -- "$PARENT_DIR"
 
-STAGE_DIR="$(mktemp -d "$PARENT_DIR/.agy-clean-stage.XXXXXX" 2>/dev/null || true)"
+STAGE_DIR="$(mktemp -d "$PARENT_DIR/.agy-human-stage.XXXXXX" 2>/dev/null || true)"
 if [ -z "$STAGE_DIR" ]; then
-  STAGE_DIR="$PARENT_DIR/.agy-clean-stage.$$"
+  STAGE_DIR="$PARENT_DIR/.agy-human-stage.$$"
   rm -rf -- "$STAGE_DIR"
   mkdir -p -- "$STAGE_DIR"
 fi
@@ -391,7 +391,7 @@ if ! is_valid_plugin_source "$STAGE_DIR"; then
 fi
 
 if [ -e "$TARGET_DIR" ] || [ -L "$TARGET_DIR" ]; then
-  BACKUP_DIR="$PARENT_DIR/.agy-clean-backup.$$"
+  BACKUP_DIR="$PARENT_DIR/.agy-human-backup.$$"
   rm -rf -- "$BACKUP_DIR"
   mv -- "$TARGET_DIR" "$BACKUP_DIR"
 fi
@@ -415,9 +415,9 @@ if [ -n "$BACKUP_DIR" ]; then
   fi
 fi
 
-echo "[agy-clean] Installed successfully to: $TARGET_DIR"
-echo "[agy-clean] Included: rules/AGENTS.md (always-on) and skills/wait-what/SKILL.md (on-demand)."
-echo "[agy-clean] config.json was not modified. Restart or reload your Antigravity window to activate."
+echo "[agy-human] Installed successfully to: $TARGET_DIR"
+echo "[agy-human] Included: rules/AGENTS.md (always-on) and skills/wait-what/SKILL.md (on-demand)."
+echo "[agy-human] config.json was not modified. Restart or reload your Antigravity window to activate."
 }
 
 main "$@"

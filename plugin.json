@@ -1,6 +1,6 @@
 {
-  "name": "agy-clean",
-  "displayName": "agy-clean (通俗精确表达与 wait-what 拆解)",
+  "name": "agy-human",
+  "displayName": "agy-human (实时编程说人话与深度复述)",
   "version": "1.0.0",
   "description": "Google Antigravity 零依赖轻量插件：内置常驻「通俗与技术精度平衡」实时编程表达规范（倒金字塔结论、先机制后术语、保留精确代码锚点），并提供按需触发的 wait-what 深度复述与费曼拆解技能。",
   "logo": "assets/logo.svg",
@@ -8,10 +8,10 @@
     "name": "zou172866",
     "url": "https://github.com/zou172866"
   },
-  "homepage": "https://github.com/zou172866/Antigravity-agy-clean",
+  "homepage": "https://github.com/zou172866/Antigravity-agy-human",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zou172866/Antigravity-agy-clean.git"
+    "url": "https://github.com/zou172866/Antigravity-agy-human.git"
   },
   "suggestedPrompts": [
     "深度复述刚才的报错根因和调用链，讲透机制并保留代码锚点",
