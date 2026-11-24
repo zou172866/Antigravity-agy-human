@@ -4,6 +4,7 @@
 # and local repository runs (`sh ./install.sh`, `sh ./install.sh --uninstall`).
 set -eu
 
+main() {
 REPO_SLUG="zou172866/Antigravity-agy-clarity"
 REPO_GIT_URL="https://github.com/$REPO_SLUG.git"
 REPO_TAR_URL="https://github.com/$REPO_SLUG/archive/refs/heads/main.tar.gz"
@@ -417,3 +418,6 @@ fi
 echo "[agy-clarity] Installed successfully to: $TARGET_DIR"
 echo "[agy-clarity] Included: rules/AGENTS.md (always-on) and skills/wait-what/SKILL.md (on-demand)."
 echo "[agy-clarity] config.json was not modified. Restart or reload your Antigravity window to activate."
+}
+
+main "$@"
