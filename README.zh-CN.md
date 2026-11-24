@@ -23,7 +23,7 @@
 `agy-clean` 用两份精炼的纯 Markdown 规范把两边拉回甜点区：
 
 - **常驻表达规范（[`rules/AGENTS.md`](rules/AGENTS.md)）**：插件开启即生效。小改动极简直出不拖节奏；复杂任务按倒金字塔输出——先用 1～2 句人话点破结论，紧接着逐字保留精确路径、函数/类名、配置键、原始报错与实跑验证结果，重点讲清根因与取舍。
-- **按需 `wait-what` 拆解技能（[`skills/wait-what/SKILL.md`](skills/wait-what/SKILL.md)）**：当你没听懂上一轮技术解释、卡在复杂源码或报错里，说一句“说人话 / `wait-what` / 费曼拆解”即触发——按「一句话定位 → 人话拆解机制（含类比代码映射与失效边界）→ 技术锚点与易踩坑」三层讲透，不失真、不降智。
+- **按需 `wait-what` 拆解技能（[`skills/wait-what/SKILL.md`](skills/wait-what/SKILL.md)）**：当你没听懂上一轮技术解释、卡在复杂源码或报错里，说一句“深度复述 / 说人话 / 费曼拆解 / `wait-what`”即触发——按「一句话定位 → 人话拆解机制（含类比代码映射与失效边界）→ 技术锚点与易踩坑」三层讲透，不失真、不降智。
 
 > **零外部运行时依赖**：不需要 Node.js，不需要 Python，不注册后台 Hook，也绝不修改 `~/.gemini/config/config.json`。
 
@@ -125,7 +125,7 @@ curl -fsSL https://raw.githubusercontent.com/zou172866/Antigravity-agy-clean/mai
 
 当你觉得上一轮解释太绕、看源码卡壳，或想彻底搞懂一段复杂机制时，在对话框直接触发：
 
-- `用 wait-what 模式把刚才的报错根因和调用链用人话拆解一遍，并保留代码锚点`
+- `深度复述一下刚才的报错根因和调用链，并保留代码锚点`
 - `没太听懂，用人话重讲一下这个状态机是怎么流转的，顺便说说最容易踩的坑`
 - `用费曼拆解帮我理清 cache-analyzer.js 的命中判定逻辑`
 

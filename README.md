@@ -23,7 +23,7 @@ AI coding assistants often fall into one of two traps:
 `agy-clean` solves both with two pure-Markdown components:
 
 - **Always-on Rule ([`rules/AGENTS.md`](rules/AGENTS.md))**: Keeps every coding turn immediately readable at a glance (inverted-pyramid headline first, mechanism before jargon, Why & trade-offs over diff narration) while preserving exact paths, symbols, parameters, error codes, and test outputs verbatim.
-- **On-demand Skill ([`skills/wait-what/SKILL.md`](skills/wait-what/SKILL.md))**: Activates whenever you say *"wait-what"*, *"explain in plain language"*, *"说人话"*, or *"费曼拆解"* during debugging or reading complex code — delivering a 3-tier breakdown with explicit analogy-to-code mappings and analogy failure boundaries.
+- **On-demand Skill ([`skills/wait-what/SKILL.md`](skills/wait-what/SKILL.md))**: Activates whenever you say *"深度复述"*, *"wait-what"*, *"explain in plain language"*, *"说人话"*, or *"费曼拆解"* during debugging or reading complex code — delivering a 3-tier breakdown with explicit analogy-to-code mappings and analogy failure boundaries.
 
 > **Zero external runtime**: Pure Markdown + SVG + native shell installers. No Node.js, no Python, no background hooks, and never edits `~/.gemini/config/config.json`.
 >
@@ -127,7 +127,7 @@ While `agy-clean` is enabled in Antigravity, `rules/AGENTS.md` is automatically 
 
 When an explanation still feels foggy — or you are stepping through unfamiliar architecture or a tangled stack trace — invoke `wait-what` naturally in chat:
 
-- *"wait-what — explain that race condition again in plain words without dropping code anchors"*
+- *"深度复述 / wait-what — explain that race condition again in plain words without dropping code anchors"*
 - *"用人话把刚才那段状态流转重讲一遍，顺便说说最容易误解的点"*
 - *"用费曼拆解帮我看懂 `store.js` 和 `cache-analyzer.js` 怎么协作"*
 
