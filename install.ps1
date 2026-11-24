@@ -29,23 +29,52 @@ $ScriptPath = $MyInvocation.MyCommand.Path
 function Fail-Install {
   param([string]$Message)
   if ($ScriptPath) {
-    Write-Error $Message
+    [Console]::Error.WriteLine("Error: $Message")
     exit 1
   }
   throw $Message
 }
 
 function Normalize-FullPath {
-  param([string]$PathValue)
-  if (-not [System.IO.Path]::IsPathRooted($PathValue)) {
-    $PathValue = Join-Path (Get-Location).ProviderPath $PathValue
+  param(
+    [string]$PathValue,
+    [string]$BaseHome
+  )
+  $p = $PathValue.Trim()
+  if ($p -eq "~") {
+    $p = $BaseHome
+  } elseif ($p -match '^~[\\/]') {
+    $p = Join-Path $BaseHome $p.Substring(2)
   }
-  $full = [System.IO.Path]::GetFullPath($PathValue)
+
+  $cwd = (Get-Location).ProviderPath
+  if ($p -match '^[\\/](?![\\/])') {
+    $cwdRoot = [System.IO.Path]::GetPathRoot($cwd)
+    $p = Join-Path $cwdRoot $p.TrimStart('\', '/')
+  } elseif ($p -match '^[A-Za-z]:(?![\\/])') {
+    $driveName = $p.Substring(0, 1)
+    $driveLoc = (Get-Location -PSDrive $driveName -ErrorAction SilentlyContinue)
+    $baseDir = if ($driveLoc) { $driveLoc.ProviderPath } else { "${driveName}:\" }
+    $p = Join-Path $baseDir $p.Substring(2)
+  } elseif (-not [System.IO.Path]::IsPathRooted($p)) {
+    $p = Join-Path $cwd $p
+  }
+
+  $full = [System.IO.Path]::GetFullPath($p)
   $root = [System.IO.Path]::GetPathRoot($full)
   if ($full -ine $root) {
     $full = $full.TrimEnd('\', '/')
   }
   return $full
+}
+
+function Test-PathInside {
+  param(
+    [string]$Parent,
+    [string]$Child
+  )
+  $prefix = if ($Parent.EndsWith('\')) { $Parent } else { $Parent + '\' }
+  return $Child.StartsWith($prefix, [System.StringComparison]::OrdinalIgnoreCase)
 }
 
 function Test-PluginSource {
@@ -70,18 +99,19 @@ $HomeDir = if ($HOME) { $HOME } else { [Environment]::GetFolderPath("UserProfile
 if (-not $HomeDir) {
   Fail-Install "Unable to determine user home directory."
 }
+$ResolvedHome = Normalize-FullPath $HomeDir $HomeDir
 
 $CustomTarget = -not [string]::IsNullOrWhiteSpace($TargetDir)
-$DefaultTarget = Join-Path $HomeDir ".gemini\config\plugins\agy-clarity"
+$DefaultTarget = Join-Path $ResolvedHome ".gemini\config\plugins\agy-clarity"
 $RawTarget = if ($CustomTarget) { $TargetDir } else { $DefaultTarget }
-$ResolvedTarget = Normalize-FullPath $RawTarget
+$ResolvedTarget = Normalize-FullPath $RawTarget $ResolvedHome
 
 $ProtectedPaths = @(
   [System.IO.Path]::GetPathRoot($ResolvedTarget),
-  (Normalize-FullPath $HomeDir),
-  (Normalize-FullPath (Join-Path $HomeDir ".gemini")),
-  (Normalize-FullPath (Join-Path $HomeDir ".gemini\config")),
-  (Normalize-FullPath (Join-Path $HomeDir ".gemini\config\plugins"))
+  $ResolvedHome,
+  (Normalize-FullPath (Join-Path $ResolvedHome ".gemini") $ResolvedHome),
+  (Normalize-FullPath (Join-Path $ResolvedHome ".gemini\config") $ResolvedHome),
+  (Normalize-FullPath (Join-Path $ResolvedHome ".gemini\config\plugins") $ResolvedHome)
 )
 foreach ($protected in $ProtectedPaths) {
   if ($ResolvedTarget -ieq $protected) {
@@ -95,6 +125,10 @@ if ($Uninstall) {
     return
   }
 
+  if (Test-Path -LiteralPath $ResolvedTarget -PathType Leaf) {
+    Fail-Install "Refusing to remove existing file at '$ResolvedTarget' (expected a directory)."
+  }
+
   $leafName = Split-Path -Leaf $ResolvedTarget
   $hasManifest = Test-Path -LiteralPath (Join-Path $ResolvedTarget "plugin.json") -PathType Leaf
   if ($CustomTarget -and ($leafName -ine "agy-clarity") -and (-not $hasManifest)) {
@@ -105,6 +139,10 @@ if ($Uninstall) {
   Write-Host "[agy-clarity] Uninstalled plugin from: $ResolvedTarget"
   Write-Host "[agy-clarity] Restart or reload your Antigravity window to apply changes."
   return
+}
+
+if (Test-Path -LiteralPath $ResolvedTarget -PathType Leaf) {
+  Fail-Install "Refusing to overwrite existing file at '$ResolvedTarget' (expected a directory)."
 }
 
 $ScriptDir = if ($ScriptPath) { Split-Path -Parent $ScriptPath } else { "" }
@@ -120,7 +158,7 @@ try {
     Write-Host "[agy-clarity] Installing from local repository: $SourceDir"
   } else {
     $TempWorkDir = Join-Path ([System.IO.Path]::GetTempPath()) ("agy-clarity-install-" + [guid]::NewGuid().ToString("N"))
-    New-Item -ItemType Directory -Force -Path $TempWorkDir | Out-Null
+    [System.IO.Directory]::CreateDirectory($TempWorkDir) | Out-Null
     $RepoDir = Join-Path $TempWorkDir "repo"
     $Fetched = $false
 
@@ -152,13 +190,26 @@ try {
         # Ignore on runtimes where SecurityProtocol is managed automatically
       }
       $ZipFile = Join-Path $TempWorkDir "agy-clarity.zip"
-      Invoke-WebRequest -Uri $RepoZipUrl -OutFile $ZipFile -UseBasicParsing
-      Expand-Archive -Path $ZipFile -DestinationPath $TempWorkDir -Force
-      $Extracted = Get-ChildItem -LiteralPath $TempWorkDir -Directory | Where-Object { Test-PluginSource $_.FullName } | Select-Object -First 1
-      if (-not $Extracted) {
-        Fail-Install "Failed to locate valid agy-clarity files inside downloaded archive."
+      $ExtractDir = Join-Path $TempWorkDir "extract"
+      [System.IO.Directory]::CreateDirectory($ExtractDir) | Out-Null
+      $WebClient = New-Object System.Net.WebClient
+      $WebClient.Headers.Add("User-Agent", "agy-clarity-installer")
+      try {
+        $WebClient.DownloadFile($RepoZipUrl, $ZipFile)
+      } finally {
+        $WebClient.Dispose()
       }
-      $SourceDir = $Extracted.FullName
+      Add-Type -AssemblyName System.IO.Compression.FileSystem
+      [System.IO.Compression.ZipFile]::ExtractToDirectory($ZipFile, $ExtractDir)
+      if (Test-PluginSource $ExtractDir) {
+        $SourceDir = $ExtractDir
+      } else {
+        $Extracted = Get-ChildItem -LiteralPath $ExtractDir -Directory | Where-Object { Test-PluginSource $_.FullName } | Select-Object -First 1
+        if (-not $Extracted) {
+          Fail-Install "Failed to locate valid agy-clarity files inside downloaded archive."
+        }
+        $SourceDir = $Extracted.FullName
+      }
     }
   }
 
@@ -166,18 +217,26 @@ try {
     Fail-Install "Invalid agy-clarity source directory: $SourceDir"
   }
 
-  $ResolvedSource = Normalize-FullPath $SourceDir
+  $ResolvedSource = Normalize-FullPath $SourceDir $ResolvedHome
   if ($ResolvedSource -ieq $ResolvedTarget) {
     Write-Host "[agy-clarity] Plugin is already installed in place at: $ResolvedTarget"
     Write-Host "[agy-clarity] Restart or reload your Antigravity window if not yet loaded."
     return
   }
 
+  if (Test-PathInside -Parent $ResolvedTarget -Child $ResolvedSource) {
+    Fail-Install "Refusing to install into ancestor directory '$ResolvedTarget' of source '$ResolvedSource'."
+  }
+
+  if (Test-PathInside -Parent $ResolvedSource -Child $ResolvedTarget) {
+    Fail-Install "Refusing to install into subdirectory '$ResolvedTarget' inside source '$ResolvedSource'."
+  }
+
   $ParentDir = Split-Path -Parent $ResolvedTarget
-  New-Item -ItemType Directory -Force -Path $ParentDir | Out-Null
+  [System.IO.Directory]::CreateDirectory($ParentDir) | Out-Null
 
   $StageDir = Join-Path $ParentDir (".agy-clarity-stage-" + [guid]::NewGuid().ToString("N"))
-  New-Item -ItemType Directory -Force -Path $StageDir | Out-Null
+  [System.IO.Directory]::CreateDirectory($StageDir) | Out-Null
 
   $Items = Get-ChildItem -LiteralPath $ResolvedSource -Force | Where-Object { $_.Name -ne ".git" }
   foreach ($item in $Items) {
