@@ -1,12 +1,14 @@
 <div align="center">
 
+[简体中文](README.zh-CN.md) · **English**
+
 <img src="assets/logo.svg" alt="agy-human logo" width="80" />
 
 # agy-human
 
 **Google Antigravity plugin: speak human in live coding without losing technical precision · on-demand `wait-what` Feynman breakdown · zero Node/Python dependencies**
 
-[简体中文](README.zh-CN.md) · English · [How to Install](#how-to-install) · [Comparison](#before-vs-after-comparison) · [`wait-what` Skill](#on-demand-wait-what-skill) · [Cross-Tool Reuse](#use-with-claude-code-cursor--codex)
+[How to Install](#how-to-install) · [Comparison](#before-vs-after-comparison) · [`wait-what` Skill](#on-demand-wait-what-skill) · [Cross-Tool Reuse](#use-with-claude-code-cursor--codex)
 
 </div>
 
