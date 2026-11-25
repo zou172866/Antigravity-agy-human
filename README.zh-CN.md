@@ -8,6 +8,8 @@
 
 **Google Antigravity 零依赖轻量插件：实时编程「说人话 + 不丢技术精度」表达规范 · 按需深度复述 / `wait-what` 费曼拆解技能 · 兼容 Claude Code / Cursor / Codex**
 
+[![Clones](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/zou172866/repo-traffic-archive/main/badges/Antigravity-agy-human.json)](https://github.com/zou172866/repo-traffic-archive)
+
 [一键安装](#如何安装) · [效果对比](#三种表达风格对比) · [`wait-what` 拆解技能](#按需技能wait-what-深度复述) · [跨工具复用](#在-claude-code--cursor--codex-中复用)
 
 </div>

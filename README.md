@@ -8,6 +8,8 @@
 
 **Google Antigravity plugin: speak human in live coding without losing technical precision · on-demand `wait-what` Feynman breakdown · zero Node/Python dependencies**
 
+[![Clones](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/zou172866/repo-traffic-archive/main/badges/Antigravity-agy-human.json)](https://github.com/zou172866/repo-traffic-archive)
+
 [How to Install](#how-to-install) · [Comparison](#before-vs-after-comparison) · [`wait-what` Skill](#on-demand-wait-what-skill) · [Cross-Tool Reuse](#use-with-claude-code-cursor--codex)
 
 </div>
